@@ -19,7 +19,6 @@ import org.springframework.web.server.ResponseStatusException;
 public class UserController {
 
     private final UserService userService;
-    private final UserRepository userRepository;
 
     @GetMapping("/users/{userId}")
     public ResponseEntity<UserResponse> getUser(@PathVariable long userId) {
@@ -33,9 +32,7 @@ public class UserController {
 
     @GetMapping("/users/search")
     public ResponseEntity<UserResponse> searchByNickname(@RequestParam String nickname) {
-        User user = userRepository.findByNickname(nickname)
-            .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, " 해당 닉네임의 유저가 존재하지 않습니다."));
-    return ResponseEntity.ok(new UserResponse(user.getId(), user.getEmail(), user.getNickname()));
+    return ResponseEntity.ok(userService.searchByNickname(nickname));
     }
 
 }
