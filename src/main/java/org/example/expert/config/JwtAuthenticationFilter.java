@@ -26,7 +26,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private final JwtUtil jwtUtil;
 
-
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 		throws ServletException, IOException {
@@ -47,6 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 		String jwt = jwtUtil.substringToken(bearerJwt);
 
+		//setauthentication 이 무조건 false인 if 문에 가둬져서 실행이 안됐었음
 		try {
 			// JWT 유효성 검사와 claims 추출
 			Claims claims = jwtUtil.extractClaims(jwt);
@@ -60,22 +60,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			String email = claims.get("email", String.class);
 			Long userId = Long.parseLong(claims.getSubject());
 
-			if (url.startsWith("/admin")) {
-				// 관리자 권한이 없는 경우 403을 반환합니다.
-				if (!UserRole.ADMIN.equals(userRole)) {
-					response.sendError(HttpServletResponse.SC_FORBIDDEN, "관리자 권한이 없습니다.");
-					return;
-				}
+			// // 관리자 권한이 없는 경우 403을 반환합니다.
+			// if (!UserRole.ADMIN.equals(userRole)) {
+			// 	response.sendError(HttpServletResponse.SC_FORBIDDEN, "관리자 권한이 없습니다.");
+			// 	return;
+			// }
 
-				AuthUser authUser = new AuthUser(userId, email, userRole);
-				UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(authUser, null,
-					authUser.getAuthorities());
-				SecurityContextHolder.getContext().setAuthentication(token);
-				filterChain.doFilter(request, response);
-				return;
-			}
-
+			AuthUser authUser = new AuthUser(userId, email, userRole);
+			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(authUser, null,
+				authUser.getAuthorities());
+			SecurityContextHolder.getContext().setAuthentication(token); // 이게 안돼서 인증 안된거라고 보내버림
 			filterChain.doFilter(request, response);
+
+
 		} catch (SecurityException | MalformedJwtException e) {
 			log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.", e);
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "유효하지 않는 JWT 서명입니다.");
