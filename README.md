@@ -43,19 +43,20 @@ public User findByNickname(String nickname) {
 ```
 
 ### 2️⃣ 인덱싱 적용
-```
+```SQL
 -- MySQL 인덱스 추가
 CREATE INDEX idx_nickname ON user(nickname);
 ```
 
-###3️⃣ Caffeine 캐시 적용
+### 3️⃣ Caffeine 캐시 적용
+
 **설정**
-```
+```bash
 // build.gradle
 implementation 'com.github.ben-manes.caffeine:caffeine'
 ```
 **캐시 구성 CacheConfig**
-```
+```java
 @Configuration
 @EnableCaching
 public class CacheConfig {
@@ -71,7 +72,7 @@ public class CacheConfig {
 ```
 
 **서비스 적용**
-```
+```java
 @Cacheable(value = "userByNickname", key = "#nickname")
 public UserResponseDto getUserByNickname(String nickname) {
     User user = userRepository.findByNickname(nickname)
