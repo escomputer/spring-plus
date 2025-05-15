@@ -24,13 +24,13 @@
 ## 🔽 Postman 결과 스크린샷
 
 ### 1. 기본 (469ms)
-![기본조회](./images/default.jpg)
+![Image](https://github.com/user-attachments/assets/92d7e0de-0110-47d7-b037-c488ff5c62c3)
 
 ### 2. 인덱스 적용 후 (14ms)
-![인덱스적용](./images/indexed.png)
+<img width="863" alt="Image" src="https://github.com/user-attachments/assets/ac478e97-239e-477d-939c-87ceb08f691d" />
 
 ### 3. 캐시 적용 후 (6ms)
-![캐시적용](./images/cached.png)
+<img width="835" alt="Image" src="https://github.com/user-attachments/assets/c094c188-4295-4a4c-92d6-5fa581c3b29e" />
 
 ## 🛠️ 개선 방법 상세
 
